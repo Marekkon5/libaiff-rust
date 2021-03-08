@@ -138,9 +138,9 @@ mod tests {
         let aiff = AIFF::open_file("noise.aiff", OpenFlags::READ_ONLY).unwrap();
         let format = aiff.get_audio_format();
         assert_ne!(format.samples, 0);
-        let samples = aiff.read_samples(format.samples as i32).unwrap();
-        assert_eq!(samples.len(), format.samples as usize);
-        println!("Read {} samples", samples.len());
+        let samples_i32 = aiff.read_samples_i32((format.samples / 2) as i32).unwrap();
+        let samples_f32 = aiff.read_samples_f32((format.samples / 2) as i32).unwrap();
+        assert_eq!(samples_i32.len() + samples_f32.len(), format.samples as usize);
         aiff.close();
     }
 }
