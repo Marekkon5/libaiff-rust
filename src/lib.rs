@@ -51,13 +51,29 @@ impl AIFF {
         }
     }
 
-    /// Read `count` samples from AIFF
-    pub fn read_samples(&self, count: i32) -> Option<Vec<i32>> {
+    /// Read `count` samples from AIFF as i32
+    pub fn read_samples_i32(&self, count: i32) -> Option<Vec<i32>> {
         let mut samples = vec![0; count as usize];
         #[allow(unused_assignments)]
         let mut read = 0;
         unsafe {
             read = bindings::AIFF_ReadSamples32Bit(self.aiff_ref, samples.as_mut_ptr(), count);
+        }
+        //Error occured
+        if read == -1 {
+            return None;
+        }
+        samples.truncate(read as usize);
+        Some(samples)
+    }
+
+    /// Read `count` samples from AIFF as f32
+    pub fn read_samples_f32(&self, count: i32) -> Option<Vec<f32>> {
+        let mut samples = vec![0.0; count as usize];
+        #[allow(unused_assignments)]
+        let mut read = 0;
+        unsafe {
+            read = bindings::AIFF_ReadSamplesFloat(self.aiff_ref, samples.as_mut_ptr(), count);
         }
         //Error occured
         if read == -1 {
