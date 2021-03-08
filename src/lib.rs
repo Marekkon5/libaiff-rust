@@ -96,11 +96,11 @@ impl AIFF {
 
 #[derive(Debug, Clone)]
 pub struct AIFFFormat {
-    samples: u64,
-    channels: i32,
-    sampling_rate: f64,
-    bits_per_sample: i32,
-    segment_size: i32,
+    pub samples: u64,
+    pub channels: i32,
+    pub sampling_rate: f64,
+    pub bits_per_sample: i32,
+    pub segment_size: i32,
 }
 
 impl Drop for AIFF {
