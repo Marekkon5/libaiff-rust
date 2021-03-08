@@ -1,3 +1,9 @@
+#![allow(non_upper_case_globals)]
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
+#![allow(dead_code)]
+#![allow(improper_ctypes)]
+
 #[macro_use]
 extern crate bitflags;
 
@@ -17,6 +23,10 @@ bitflags! {
     }
 }
 
+//Allow threads
+unsafe impl Send for AIFF {}
+unsafe impl Sync for AIFF {}
+
 pub struct AIFF {
     aiff_ref: *mut bindings::s_AIFF_Ref,
 }
@@ -34,8 +44,8 @@ impl AIFF {
         None
     }
 
-    // Close libAIFF
-    fn close(&self) {
+    /// Close file, use when writing, might cause SegFault.
+    pub fn close(&self) {
         unsafe {
             bindings::AIFF_CloseFile(self.aiff_ref);
         }
@@ -103,13 +113,6 @@ pub struct AIFFFormat {
     pub segment_size: i32,
 }
 
-impl Drop for AIFF {
-    fn drop(&mut self) {
-        //Close file on drop
-        self.close();
-    }
-}
-
 #[cfg(test)]
 mod tests {
     //Test if the library even works
@@ -122,5 +125,6 @@ mod tests {
         let samples = aiff.read_samples(format.samples as i32).unwrap();
         assert_eq!(samples.len(), format.samples as usize);
         println!("Read {} samples", samples.len());
+        aiff.close();
     }
 }
