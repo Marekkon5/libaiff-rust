@@ -10,7 +10,7 @@ links = "aiff"
 
 [lib]
 name = "aiff"
-crate-type = ["staticlib"]
+crate-type = ["lib"]
 
 [dependencies]
 bitflags = "1.0"
