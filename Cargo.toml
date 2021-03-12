@@ -16,4 +16,4 @@ crate-type = ["lib"]
 bitflags = "1.0"
 
 [build-dependencies]
-bindgen = "0.57"
+bindgen = "0.54"
